@@ -701,6 +701,8 @@ class IFSuperResolutionPipeline(DiffusionPipeline):
         guidance_scale: float = 4.0,
         negative_prompt: Optional[Union[str, List[str]]] = None,
         num_images_per_prompt: Optional[int] = 1,
+        height: Optional[int] = None,
+        width: Optional[int] = None,
         eta: float = 0.0,
         generator: Optional[Union[torch.Generator, List[torch.Generator]]] = None,
         prompt_embeds: Optional[torch.FloatTensor] = None,
@@ -740,6 +742,10 @@ class IFSuperResolutionPipeline(DiffusionPipeline):
                 less than `1`).
             num_images_per_prompt (`int`, *optional*, defaults to 1):
                 The number of images to generate per prompt.
+            height (`int`, *optional*, defaults to self.unet.config.sample_size):
+                The height in pixels of the generated image.
+            width (`int`, *optional*, defaults to self.unet.config.sample_size):
+                The width in pixels of the generated image.
             eta (`float`, *optional*, defaults to 0.0):
                 Corresponds to parameter eta (η) in the DDIM paper: https://arxiv.org/abs/2010.02502. Only applies to
                 [`schedulers.DDIMScheduler`], will be ignored for others.
@@ -806,8 +812,8 @@ class IFSuperResolutionPipeline(DiffusionPipeline):
 
         # 2. Define call parameters
 
-        height = self.unet.config.sample_size
-        width = self.unet.config.sample_size
+        height = height or self.unet.config.sample_size
+        width = width or self.unet.config.sample_size
 
         device = self._execution_device
 
