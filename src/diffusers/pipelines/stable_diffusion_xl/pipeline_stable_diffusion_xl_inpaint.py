@@ -41,15 +41,6 @@ from ...utils import (
 )
 from ..pipeline_utils import DiffusionPipeline
 from . import StableDiffusionXLPipelineOutput
-<<<<<<< HEAD
-
-
-if is_invisible_watermark_available():
-    from .watermark import StableDiffusionXLWatermarker
-=======
-#from .watermark import StableDiffusionXLWatermarker
->>>>>>> adjust watermarker for new pipelines
-
 
 logger = logging.get_logger(__name__)  # pylint: disable=invalid-name
 
@@ -296,15 +287,6 @@ class StableDiffusionXLInpaintPipeline(DiffusionPipeline, LoraLoaderMixin, FromS
         self.image_processor = VaeImageProcessor(vae_scale_factor=self.vae_scale_factor)
 
         add_watermarker = add_watermarker if add_watermarker is not None else is_invisible_watermark_available()
-
-<<<<<<< HEAD
-        if add_watermarker:
-            self.watermark = StableDiffusionXLWatermarker()
-        else:
-            self.watermark = None
-=======
-#        self.watermark = StableDiffusionXLWatermarker()
->>>>>>> adjust watermarker for new pipelines
 
     # Copied from diffusers.pipelines.stable_diffusion.pipeline_stable_diffusion.StableDiffusionPipeline.enable_vae_slicing
     def enable_vae_slicing(self):
