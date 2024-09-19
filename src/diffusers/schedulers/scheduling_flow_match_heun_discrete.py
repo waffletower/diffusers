@@ -137,7 +137,10 @@ class FlowMatchHeunDiscreteScheduler(SchedulerMixin, ConfigMixin):
     def _sigma_to_t(self, sigma):
         return sigma * self.config.num_train_timesteps
 
-    def set_timesteps(self, num_inference_steps: int, device: Union[str, torch.device] = None):
+    def set_timesteps(self,
+                      num_inference_steps: int,
+                      device: Union[str, torch.device] = None,
+                      sigmas: Optional[List[float]] = None,):
         """
         Sets the discrete timesteps used for the diffusion chain (to be run before inference).
 
@@ -147,13 +150,15 @@ class FlowMatchHeunDiscreteScheduler(SchedulerMixin, ConfigMixin):
             device (`str` or `torch.device`, *optional*):
                 The device to which the timesteps should be moved to. If `None`, the timesteps are not moved.
         """
-        self.num_inference_steps = num_inference_steps
+        if sigmas is None:
+            self.num_inference_steps = num_inference_steps
 
-        timesteps = np.linspace(
-            self._sigma_to_t(self.sigma_max), self._sigma_to_t(self.sigma_min), num_inference_steps
-        )
+            timesteps = np.linspace(
+                self._sigma_to_t(self.sigma_max), self._sigma_to_t(self.sigma_min), num_inference_steps
+            )
 
-        sigmas = timesteps / self.config.num_train_timesteps
+            sigmas = timesteps / self.config.num_train_timesteps
+
         sigmas = self.config.shift * sigmas / (1 + (self.config.shift - 1) * sigmas)
         sigmas = torch.from_numpy(sigmas).to(dtype=torch.float32, device=device)
 
