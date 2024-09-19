@@ -145,7 +145,7 @@ class FlowMatchHeunDiscreteScheduler(SchedulerMixin, ConfigMixin):
         return math.exp(mu) / (math.exp(mu) + (1 / t - 1) ** sigma)
 
     def set_timesteps(self,
-                      num_inference_steps: int,
+                      num_inference_steps: int = None,
                       device: Union[str, torch.device] = None,
                       sigmas: Optional[List[float]] = None,
                       mu: Optional[float] = None,
