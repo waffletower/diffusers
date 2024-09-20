@@ -689,7 +689,7 @@ class FluxPipeline(DiffusionPipeline, FluxLoraLoaderMixin, FromSingleFileMixin):
             self.scheduler.config.base_shift,
             self.scheduler.config.max_shift,
         )
-        timesteps, num_inference_steps = retrieve_timesteps(
+        timesteps, num_scheduler_steps = retrieve_timesteps(
             self.scheduler,
             num_inference_steps,
             device,
@@ -697,7 +697,7 @@ class FluxPipeline(DiffusionPipeline, FluxLoraLoaderMixin, FromSingleFileMixin):
             sigmas,
             mu=mu,
         )
-        num_warmup_steps = max(len(timesteps) - num_inference_steps * self.scheduler.order, 0)
+        num_warmup_steps = max(len(timesteps) - num_scheduler_steps * self.scheduler.order, 0)
         self._num_timesteps = len(timesteps)
 
         # handle guidance
